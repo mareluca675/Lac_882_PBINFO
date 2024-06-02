@@ -1,0 +1,48 @@
+#include <fstream>
+
+std::ifstream fin("lac.in");
+std::ofstream fout("lac.out");
+
+bool A[1001][1001];
+int n, m, in, pin;
+bool insula;
+
+void fill(int i, int j){
+    if(!i || !j || i > n || j > m || !A[i][j])
+        return;
+
+    if(i == 1 || j == 1 || i == n || j == m)
+        insula = false;
+    A[i][j] = 0;
+    
+    fill(i + 1, j);
+    fill(i - 1, j);
+    fill(i, j + 1);
+    fill(i, j - 1);
+}
+
+int main() {
+
+    fin >> n >> m;
+
+    for (int i = 1; i <= n; ++i)
+        for (int j = 1; j <= m; ++j)
+            fin >> A[i][j];
+
+    for (int i = 1; i <= n; ++i){
+        for (int j = 1; j <= m; ++j){
+            if (A[i][j] == 1) {
+                insula = true;
+                fill(i, j);
+
+                if(insula)
+                    ++ in;
+                else
+                    ++ pin;
+            }
+        }
+    }
+
+    fout << in << ' ' << pin;
+    return 0;
+}
